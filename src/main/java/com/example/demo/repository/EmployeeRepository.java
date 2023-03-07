@@ -15,8 +15,8 @@ public class EmployeeRepository {
 
     private static String KEY="EMPLOYEE";
 
+    // I use Hash as Data type for Redis.
     private HashOperations<String,String,Employee> hashOperations;
-    
 
     public EmployeeRepository(RedisTemplate<String,Object>  redisTemplate) {
         this.hashOperations=redisTemplate.opsForHash();
