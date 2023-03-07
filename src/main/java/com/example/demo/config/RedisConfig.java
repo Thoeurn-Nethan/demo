@@ -27,6 +27,7 @@ public class RedisConfig {
     // Set connection
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory(){
+        // Configuration class used for setting up RedisConnection via RedisConnectionFactory using connecting to a single node Redis installation
         RedisStandaloneConfiguration configuration= new RedisStandaloneConfiguration();
         configuration.setHostName(host);
         configuration.setPort(port);
