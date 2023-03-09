@@ -22,7 +22,10 @@ public class RedisConfig {
     private String host;
     @Value("${spring.redis.port}")
     private int port;
-    
+    @Value("${spring.redis.username}")
+    private String username;
+    @Value("${spring.redis.password}")
+    private String password;
     
     // Set connection
 	@Bean
@@ -31,21 +34,23 @@ public class RedisConfig {
         RedisStandaloneConfiguration configuration= new RedisStandaloneConfiguration();
         configuration.setHostName(host);
         configuration.setPort(port);
+        configuration.setUsername(username);
+        configuration.setPassword(password);
 		return new JedisConnectionFactory(configuration);
 	}
 
     /* This is the default configuration and it will use java Serializer 
     (You model class must implement Serializable) */
-	@Bean
+	/* @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String,Object> redisTemplate= new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         return redisTemplate;
-    }
+    } */
 
     /* This is configuration for Redis to store values as JSON. We use Jackson2JsonRedisSerializer
     (Model class don't need to implement Serializable , You can remove it ) */
-   /* @Bean
+   @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
@@ -66,5 +71,5 @@ public class RedisConfig {
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
-    } */
+    }
 }
