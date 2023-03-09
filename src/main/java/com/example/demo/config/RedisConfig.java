@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Jedis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -22,33 +23,36 @@ public class RedisConfig {
     private String host;
     @Value("${spring.redis.port}")
     private int port;
-    @Value("${spring.redis.username}")
+    /* @Value("${spring.redis.username}")
     private String username;
     @Value("${spring.redis.password}")
-    private String password;
+    private String password; */
     
     // Set connection
 	@Bean
 	JedisConnectionFactory jedisConnectionFactory(){
-        // Configuration class used for setting up RedisConnection via RedisConnectionFactory using connecting to a single node Redis installation
+     /* RedisStandaloneConfiguration class used for setting up RedisConnection via 
+        RedisConnectionFactory using connecting to a single node Redis installation */
         RedisStandaloneConfiguration configuration= new RedisStandaloneConfiguration();
         configuration.setHostName(host);
         configuration.setPort(port);
-        configuration.setUsername(username);
-        configuration.setPassword(password);
-		return new JedisConnectionFactory(configuration);
+     /* configuration.setUsername(username);
+        configuration.setPassword(password); */
+        JedisConnectionFactory jedisConnectionFactory= new JedisConnectionFactory(configuration);
+		return jedisConnectionFactory;
 	}
 
-    /* This is the default configuration and it will use java Serializer 
+ /* This is the default configuration and it will use java Serializer 
     (You model class must implement Serializable) */
-	/* @Bean
+
+	/*@Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String,Object> redisTemplate= new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         return redisTemplate;
     } */
 
-    /* This is configuration for Redis to store values as JSON. We use Jackson2JsonRedisSerializer
+/* This is configuration for Redis to store values as JSON. We use Jackson2JsonRedisSerializer
     (Model class don't need to implement Serializable , You can remove it ) */
    @Bean
     public RedisTemplate<String, Object> redisTemplate() {
@@ -67,7 +71,7 @@ public class RedisConfig {
         jackson2JsonRedisSerializer.setObjectMapper(objectMapper);
        
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer); // The serialization type of value
-        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);   // the serialization type of hash key
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
